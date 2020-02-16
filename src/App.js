@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import moment from 'moment';
+
 import {
   DateRangePicker,
   SingleDatePicker,
@@ -16,9 +17,34 @@ class App extends Component {
     super(props);
     this.state = {
       startDate: null,
-      endDate: null
+      endDate: null,
+      dates: []
     };
   }
+
+  getDates = () => {
+    let arr = [];
+    let count = 0;
+    while (
+      moment(this.state.startDate)
+        .add(count, 'd')
+        .format('DD-MM-YYYY') !==
+      moment(this.state.endDate).format('DD-MM-YYYY')
+    ) {
+      arr.push(
+        moment(this.state.startDate)
+          .add(count, 'd')
+          .format('DD-MM-YYYY')
+      );
+      count++;
+    }
+    arr.push(moment(this.state.endDate).format('DD-MM-YYYY'));
+    this.state.dates = arr;
+    console.log(this.state.dates);
+
+    //let fechita = moment(this.state.startDate).format('DD-MM-YYYY');
+    //alert(fechita);
+  };
 
   render() {
     return (
@@ -39,6 +65,7 @@ class App extends Component {
           numberOfMonths={1}
           isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
         />
+        <button onClick={this.getDates}>click</button>
       </div>
     );
   }
